@@ -1,5 +1,5 @@
-#ifndef OWN_CACHE_LRUCACHE_H_
-#define OWN_CACHE_LRUCACHE_H_
+#ifndef MHYEAGLE_CACHE_LRUCACHE_H_
+#define MHYEAGLE_CACHE_LRUCACHE_H_
 
 #include <iostream>
 #include <string>
