@@ -56,6 +56,7 @@ int LruCache::Del(int key) {
     iter = cache_.find(key);
     if (cache_.end() != iter) {
         DelNode(&iter->second);
+        cache_.erase(iter);
     }
 
     return 0;
@@ -86,7 +87,6 @@ int LruCache::DelNode(LruNode *node) {
     //remove node from double list
     node->next->prev = node->prev;
     node->prev->next = node->next;
-    delete node;
     node = NULL;
 
     return 0;
