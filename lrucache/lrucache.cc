@@ -18,6 +18,15 @@ LruCache::~LruCache() {
     end_ = NULL;
 }
 
+int LruCache::Init(const std::string &config_file) {
+	using boost::property_tree::ptree;
+	ptree config_tree;
+	read_xml(config_file, config_tree);
+	cache_size_ = config_tree.get("container.container_num", 100);
+
+	return 0;
+}
+
 int LruCache::Get(int key, std::string &value) {
     std::unordered_map<int, LruNode>::iterator iter;
     iter = cache_.find(key);

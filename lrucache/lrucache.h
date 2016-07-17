@@ -5,6 +5,9 @@
 #include <string>
 #include <iterator>
 #include <unordered_map>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
 
 typedef struct LruNode {
     LruNode *prev = NULL;
@@ -17,6 +20,7 @@ public:
     LruCache();
     LruCache(unsigned long size);
     ~LruCache();
+    int Init(const std::string &config_file);
     int Get(int key, std::string &value);
     int Set(int key, std::string value);
     int Del(int key);
