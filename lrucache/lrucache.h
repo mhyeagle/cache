@@ -8,6 +8,9 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+#include <log4cpp/Category.hh>
+#include <log4cpp/PropertyConfigurator.hh>
+
 
 typedef struct LruNode {
     LruNode *prev = NULL;
@@ -18,7 +21,6 @@ typedef struct LruNode {
 class LruCache {
 public:
     LruCache();
-    LruCache(unsigned long size);
     ~LruCache();
     int Init(const std::string &config_file);
     int Get(int key, std::string &value);
@@ -33,6 +35,8 @@ private:
     LruNode *start_;
     LruNode *end_;
     unsigned long cache_size_;
+
+    log4cpp::Category* cache_log_;
 };
 
 #endif //OWN_CACHE_LRUCACHE_H_

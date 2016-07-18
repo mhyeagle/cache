@@ -6,12 +6,6 @@ LruCache::LruCache() {
     cache_size_ = 0;
 }
 
-LruCache::LruCache(unsigned long size) {
-    start_ = NULL;
-    end_ = NULL;
-    cache_size_ = size;
-}
-
 LruCache::~LruCache() {
     cache_.clear();
     start_ = NULL;
@@ -24,6 +18,13 @@ int LruCache::Init(const std::string &config_file) {
 	read_xml(config_file, config_tree);
 	cache_size_ = config_tree.get("container.container_num", 100);
 
+	std::string log4cpp_config = config_tree.get<std::string>("container.log4cpp");
+	log4cpp::PropertyConfigurator::configure(log4cpp_config);
+	log4cpp::Category& temp_log = log4cpp::Category::getInstance(std::string("cachelog"));
+	cache_log_ = &temp_log;
+
+	cache_log_->info("lrucache init success !, the cache size is: %d", cache_size_);
+
 	return 0;
 }
 
@@ -31,7 +32,7 @@ int LruCache::Get(int key, std::string &value) {
     std::unordered_map<int, LruNode>::iterator iter;
     iter = cache_.find(key);
     if (cache_.end() == iter) {
-        std::cout << "do not exit the element in cache, the key is: " << key << std::endl;
+        cache_log_->info("The key %d is not exist in the cache.", key);
         return 1;
     } else {
         value = iter->second.value;
@@ -85,10 +86,12 @@ int LruCache::MoveNodeHead(LruNode *node) {
         node->next->prev = node->prev;
         //add node to first position of double list
         node->next = start_;
-        node->prev = &start_;
+        node->prev = start_;
         node->next->prev = node;
         start_ = node;
     }
+    cache_log_->debug("Move node head, the node value is %s.", node->value);
+
     return 0;
 }
 
@@ -97,6 +100,8 @@ int LruCache::DelNode(LruNode *node) {
     node->next->prev = node->prev;
     node->prev->next = node->next;
     node = NULL;
+
+    cache_log_->debug("Delete node which value is %s.", node->value);
 
     return 0;
 }
