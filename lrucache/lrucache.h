@@ -35,6 +35,8 @@ private:
     LruNode *start_;
     LruNode *end_;
     unsigned long cache_size_;
+
+    log4cpp::Category* cache_log_;
 };
 
 #endif //OWN_CACHE_LRUCACHE_H_

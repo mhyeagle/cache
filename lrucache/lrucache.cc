@@ -4,12 +4,15 @@ LruCache::LruCache() {
     start_ = NULL;
     end_ = NULL;
     cache_size_ = 0;
+    cache_log_ = NULL;
 }
 
 LruCache::~LruCache() {
     cache_.clear();
     start_ = NULL;
     end_ = NULL;
+    cache_log_ = NULL;
+    log4cpp::Category::shutdown();
 }
 
 int LruCache::Init(const std::string &config_file) {
